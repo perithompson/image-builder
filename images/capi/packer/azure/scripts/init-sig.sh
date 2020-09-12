@@ -27,3 +27,19 @@ az sig image-definition create \
    --offer capz-demo \
    --sku 20_04-lts \
    --os-type Linux
+az sig image-definition create \
+   --resource-group ${RESOURCE_GROUP_NAME} \
+   --gallery-name ${GALLERY_NAME} \
+   --gallery-image-definition capi-windows-2019 \
+   --publisher capz \
+   --offer capz-demo \
+   --sku win-2019 \
+   --os-type Windows
+az sig image-definition create \
+   --resource-group ${RESOURCE_GROUP_NAME} \
+   --gallery-name ${GALLERY_NAME} \
+   --gallery-image-definition capi-windows-2004 \
+   --publisher capz \
+   --offer capz-demo \
+   --sku win-2004 \
+   --os-type Windows
