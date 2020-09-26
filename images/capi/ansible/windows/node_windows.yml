@@ -22,7 +22,11 @@
     - name: Check if wins url is set
       set_fact:
         use_wins: '{{ true if (wins_url is defined) and (wins_url|length > 0) else false }}'
-
+    
+    - name: Check Architecture
+      set_fact:
+        is_64: '{{ true if ansible_architecture == "64-bit" else false }}'
+    
     - include_role:
         name: systemprep
     - include_role:
