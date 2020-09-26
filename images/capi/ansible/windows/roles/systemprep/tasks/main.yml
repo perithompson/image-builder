@@ -32,8 +32,15 @@
 - name: Install Windows updates based on KB numbers
   win_updates:
     whitelist: "{{ windows_updates_kbs_numbers }}"
+    reboot: yes
   when: windows_updates_kbs_numbers|length > 0
 
+- name: Install Windows updates based on Categories
+  win_updates:
+    category_names: "{{ windows_updates_category_names }}"
+    reboot: yes
+  when: windows_updates_category_names|length > 0
+  
 - name: Update Windows Defender signatures
   win_shell: |
     # https://github.com/microsoft/azure-pipelines-image-generation/pull/1259/files
@@ -48,6 +55,12 @@
   become: yes
   become_method: runas
   become_user: SYSTEM
+
+- name: Set SSH service startup mode to auto and ensure it is started
+  win_service:
+    name: sshd
+    start_mode: auto
+    state: started
 
 - name: Add required Windows Features
   win_feature:
