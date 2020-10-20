@@ -19,3 +19,12 @@ ansible_winrm_server_cert_validation=ignore
 ```
 
 Then run: `ansible-playbook -vvv node_windows.yml --extra-vars "@example.vars.yml`
+
+## Known issue on MacOS with ansible
+The Winrm connection plugin for Ansible on MacOS causes connection issues which can result in `ERROR! A worker was found in a dead state`. See https://docs.ansible.com/ansible/latest/user_guide/windows_winrm.html#what-is-winrm for more details.
+
+To fix the issue on MacOs is to set the no_proxy environment variable. Example:
+
+```
+'no_proxy=* make build-azure-vhd-windows-2019'
+```
