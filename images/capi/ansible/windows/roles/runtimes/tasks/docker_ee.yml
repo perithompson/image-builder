@@ -32,10 +32,14 @@
 - name: Pre-pull images
   win_command: docker pull {{ item }}
   loop: "{{ prepull_images }}"
+  async: 1800
+  poll: 60
   when: prepull
 
 - name: Pre-pull additional images
   win_command: docker pull {{ item }}
   loop: "{{ additional_prepull_images_list }}"
+  async: 1800
+  poll: 60
   when: additional_prepull_images_list|length > 0
   
