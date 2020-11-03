@@ -15,6 +15,10 @@
     "manifest_output": "manifest.json",
     "vm_size": "",
     "cloudbase_init_url": "https://github.com/cloudbase/cloudbase-init/releases/download/{{user `cloudbase_init_version`}}/CloudbaseInitSetup_{{user `cloudbase_init_version` | replace_all `.` `_` }}_x64.msi",
+    "cloudbase_metadata_services": "cloudbaseinit.metadata.services.vmwareguestinfoservice.VMwareGuestInfoService",
+    "cloudbase_plugins": "cloudbaseinit.plugins.common.ephemeraldisk.EphemeralDiskPlugin, cloudbaseinit.plugins.common.mtu.MTUPlugin, cloudbaseinit.plugins.common.sethostname.SetHostNamePlugin,  cloudbaseinit.plugins.common.sshpublickeys.SetUserSSHPublicKeysPlugin, cloudbaseinit.plugins.common.userdata.UserDataPlugin, cloudbaseinit.plugins.common.localscripts.LocalScriptsPlugin",
+    "cloudbase_metadata_services_unattend": "cloudbaseinit.metadata.services.vmwareguestinfoservice.VMwareGuestInfoService",
+    "cloudbase_plugins_unattend": "cloudbaseinit.plugins.common.mtu.MTUPlugin",
     "wins_url": "https://github.com/rancher/wins/releases/download/v{{user `wins_version`}}/wins.exe",
     "windows_updates_kbs": null,
     "windows_updates_categories": "SecurityUpdates,CriticalUpdates,UpdateRollups",
@@ -78,6 +82,7 @@
       "datacenter": "{{user `datacenter`}}",
       "folder": "{{user `folder`}}",
       "host":     "{{user `host`}}",
+      "resource_pool":     "{{user `resource_pool`}}",
       "convert_to_template": "{{user `convert_to_template`}}",
       "cluster": "{{user `cluster`}}",
       "NestedHV" : true,
@@ -105,12 +110,12 @@
       "winrm_password": "S3cr3t0!",
       "winrm_insecure": true,
       "winrm_timeout": "4h",
-      "shutdown_command": "C:/Windows/packer/PackerShutdown.bat",
+      "shutdown_command": "powershell A:/sysprep.ps1",
       "shutdown_timeout": "1h",
 
       "storage": [
         {
-          "disk_size": 40960,
+          "disk_size": 81920,
           "disk_thin_provisioned": "{{user `disk_thin_provisioned`}}"
         }
       ],
@@ -123,7 +128,7 @@
         "./packer/ova/windows/enable-winrm.ps1",
         "./packer/ova/windows/install-pvscsi-drivers.ps1",
         "./packer/ova/windows/install-vm-tools.cmd",
-        "./packer/ova/windows/shutdown-save.ps1",
+        "./packer/ova/windows/sysprep.ps1",
         "./packer/ova/windows/set-temp.ps1"
       ],
       "floppy_dirs": [
