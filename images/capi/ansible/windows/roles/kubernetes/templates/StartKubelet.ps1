@@ -14,7 +14,7 @@
 
 # From https://github.com/kubernetes-sigs/sig-windows-tools/blob/master/kubeadm/scripts/PrepareNode.ps1
 $FileContent = Get-Content -Path "/var/lib/kubelet/kubeadm-flags.env"
-$global:KubeletArgs = $FileContent.Trim("KUBELET_KUBEADM_ARGS=`"")
+$global:KubeletArgs = $FileContent.Trim("KUBELET_KUBEADM_ARGS=`"").Split(" ")
 {% raw %}
 $netId = docker network ls -f name=host --format "{{ .ID }}"
 {% endraw %}
@@ -22,7 +22,7 @@ if ($netId.Length -lt 1) {
     docker network create -d nat host
 }
 
-$args = "$global:KubeletArgs",
+$args = $global:KubeletArgs,
         "--cert-dir=$env:SYSTEMDRIVE/var/lib/kubelet/pki",
         "--config=$env:SYSTEMDRIVE/var/lib/kubelet/config.yaml",
         "--bootstrap-kubeconfig=$env:SYSTEMDRIVE/etc/kubernetes/bootstrap-kubelet.conf",
