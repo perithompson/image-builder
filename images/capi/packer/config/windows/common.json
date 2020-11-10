@@ -5,6 +5,7 @@
   "prepull": "true",
   "wins_version": "0.0.4",
   "windows_updates_kbs": "",
+  "windows_updates_categories": "SecurityUpdates CriticalUpdates UpdateRollups",
   "windows_service_manager": "nssm",
   "nssm_url": "https://azurek8scishared.blob.core.windows.net/nssm/nssm.exe",
   "runtime": "docker_ee",
