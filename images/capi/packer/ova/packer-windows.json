@@ -9,11 +9,9 @@
     "containerd_sha256": null,
     "containerd_url": "",
     "kubernetes_semver": null,
-    "kubernetes_source_type": null,
-    "kubernetes_http_source": null,
+    "kubernetes_base_url": "https://kubernetesreleases.blob.core.windows.net/kubernetes/{{user `kubernetes_semver`}}/binaries/node/windows/{{user `kubernetes_goarch`}}",
     "kubernetes_http_package_url": "",
     "manifest_output": "manifest.json",
-    "vm_size": "",
     "cloudbase_init_url": "https://github.com/cloudbase/cloudbase-init/releases/download/{{user `cloudbase_init_version`}}/CloudbaseInitSetup_{{user `cloudbase_init_version` | replace_all `.` `_` }}_x64.msi",
     "cloudbase_metadata_services": "cloudbaseinit.metadata.services.vmwareguestinfoservice.VMwareGuestInfoService",
     "cloudbase_plugins": "cloudbaseinit.plugins.common.ephemeraldisk.EphemeralDiskPlugin, cloudbaseinit.plugins.common.mtu.MTUPlugin, cloudbaseinit.plugins.common.sethostname.SetHostNamePlugin,  cloudbaseinit.plugins.common.sshpublickeys.SetUserSSHPublicKeysPlugin, cloudbaseinit.plugins.common.userdata.UserDataPlugin, cloudbaseinit.plugins.common.localscripts.LocalScriptsPlugin",
@@ -21,7 +19,7 @@
     "cloudbase_plugins_unattend": "cloudbaseinit.plugins.common.mtu.MTUPlugin",
     "wins_url": "https://github.com/rancher/wins/releases/download/v{{user `wins_version`}}/wins.exe",
     "windows_updates_kbs": null,
-    "windows_updates_categories": "SecurityUpdates,CriticalUpdates,UpdateRollups",
+    "windows_updates_categories": null,
     "prepull": null,
     "windows_service_manager": null,
     "output_dir": "./output/{{user `build_version`}}"
@@ -37,9 +35,9 @@
       "version": "{{user `vmx_version`}}",
       "cpus": 2,
       "memory": 4096,
-      "disk_size": 40960,
+      "disk_size": 81920,
       "disk_type_id": "{{user `disk_type_id`}}",
-      "disk_adapter_type": "sata",
+      "disk_adapter_type": "scsi",
       "boot_wait": "{{user `boot_wait`}}",
       "iso_urls": [
         "{{user `os_iso_url`}}"
@@ -51,7 +49,7 @@
         "./packer/ova/windows/disable-winrm.ps1",
         "./packer/ova/windows/install-pvscsi-drivers.ps1",
         "./packer/ova/windows/enable-winrm.ps1",
-        "./packer/ova/windows/shutdown-save.ps1",
+        "./packer/ova/windows/sysprep.ps1",
         "./packer/ova/windows/set-temp.ps1"
       ],
       "floppy_dirs": [
@@ -126,7 +124,6 @@
         "./packer/ova/windows/disable-network-discovery.cmd",
         "./packer/ova/windows/disable-winrm.ps1",
         "./packer/ova/windows/enable-winrm.ps1",
-        "./packer/ova/windows/install-pvscsi-drivers.ps1",
         "./packer/ova/windows/install-vm-tools.cmd",
         "./packer/ova/windows/sysprep.ps1",
         "./packer/ova/windows/set-temp.ps1"
@@ -165,12 +162,6 @@
       "type": "windows-restart",
       "restart_command": "powershell \"& {(Get-WmiObject win32_operatingsystem).LastBootUpTime > C:\\ProgramData\\lastboot.txt; Restart-Computer -force}\"",
       "restart_check_command": "powershell -command \"& {if ((get-content C:\\ProgramData\\lastboot.txt) -eq (Get-WmiObject win32_operatingsystem).LastBootUpTime) {Write-Output 'Sleeping for 600 seconds to wait for reboot'; start-sleep 600} else {Write-Output 'Reboot complete'}}\""
-    },
-    {
-      "elevated_user": "Administrator",
-      "elevated_password": "{{.WinRMPassword}}",
-      "type": "powershell",
-      "script": "packer/ova/windows/shutdown-save.ps1"
     }
   ],
   "post-processors": [

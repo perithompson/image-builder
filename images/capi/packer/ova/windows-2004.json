@@ -8,7 +8,6 @@
   "os_iso_path" : "[datastore] ISO/en_windows_server_version_2004_x64_dvd_765aeb22.iso",
   "vmtools_iso_path" : "[datastore] ISO/vmtools/windows-11.1.5.iso",
   "os_iso_url": "file:/path/en_windows_server_version_2004_x64_dvd_765aeb22.iso",
-  "disk_controller_type": "lsilogic-sas",
-  "iso_checksum": "none",
-  "kubernetes_semver": "v1.19.2"
+  "disk_controller_type": "pvscsi",
+  "iso_checksum": "none"
 }
