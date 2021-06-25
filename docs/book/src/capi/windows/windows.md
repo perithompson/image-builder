@@ -41,6 +41,14 @@ To choose individual updates, provide a value for `windows_updates_kbs` in `pack
 Example: 
 `"windows_updates_kbs": "KB4580390 KB4471332"`.  
 
+## Internet-restricted Environments
+When building a windows image in an internet-restricted environment, you can disable windows updates by providing empty `windows_updates_kbs` and `windows_updates_categories` to skip checking for updates and you will also need to provide several urls to an accessible location to download the required components such as Kubernetes, Containerd, nssm, etc... 
+
+When installing OpenSSH, Windows also uses Microsoft Update servers to obtain the necessary installation file.  In order to get around this, Microsoft Volume License or Visual Studio customers may download OpenSSH by extracting it from the Windows 10 [Features on Demand ISO](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/features-on-demand-non-language-fod) which contains a file called *OpenSSH-Server-Package~31bf3856ad364e35~amd64~~.cab*. Provided that ansible is able to reach the location, specifying the `openssh_url` variable with a url where this file is hosted will allow ansible to install OpenSSH without contacting the Microsoft Update Servers. 
+
+Example: 
+`"openssh_url": "https://accessible-web-server/OpenSSH-Server-Package~31bf3856ad364e35~amd64~~.cab"`.  
+
 ## Using the Ansible Scripts directly
 
 Ansible doesn't run on directly on Windows (wsl works) but can used to configure a remote Windows host.  For faster development you can create a VM and run Ansible against the Windows VM directly with out using packer. This document gives the high level steps to use Ansible from Linux machine.

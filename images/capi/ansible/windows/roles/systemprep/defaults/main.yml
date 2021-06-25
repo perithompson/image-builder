@@ -14,3 +14,5 @@
 ---
 windows_updates_kbs_numbers: "{{ windows_updates_kbs.split() if (windows_updates_kbs is defined) and (windows_updates_kbs|length > 0) else [] }}"
 windows_updates_category_names: "{{ windows_updates_categories.split() if (windows_updates_categories is defined) and (windows_updates_categories|length > 0) else [] }}"
+openssh_url: "{{ openssh_url }}"
+openssh_checksum: "4b47b07b5e634291fad8ebfe85dd6446d74896c7e391276c7953671af7ce918a"

@@ -1,0 +1,30 @@
+
+- name: Create temporary download ssh directory
+  win_file:
+    path: '{{ tempdir.stdout | trim }}\ssh'
+    state: directory
+
+- name: Download OpenSSH-Server-Package
+  win_get_url:
+    url: '{{ openssh_url }}'
+    dest: '{{ tempdir.stdout | trim }}\ssh\OpenSSH-Server-Package~31bf3856ad364e35~amd64~~.cab'
+    checksum: '{{ openssh_checksum }}'
+    checksum_algorithm: "sha256"
+  register: download_ssh
+  retries: 5
+  delay: 3
+  until: download_ssh is not failed
+
+# Requires admin rights to install 
+# https://docs.ansible.com/ansible/latest/user_guide/become.html#become-and-windows
+- name: Install OpenSSH from offline Source
+  win_shell: Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0 -Source '{{ tempdir.stdout | trim }}\ssh' -LimitAccess
+  become: yes
+  become_method: runas
+  become_user: SYSTEM
+
+- name: Remove downloaded cab file
+  win_file: 
+    state: absent
+    path: '{{ tempdir.stdout | trim }}\ssh'
+    
